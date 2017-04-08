@@ -3,10 +3,18 @@
 	
 	<link rel="stylesheet" href="mathquill-0.10.1/mathquill.css"/>
 	<script src="mathquill-0.10.1/mathquill.js"></script>
+	<script type="text/javascript">
+		update_copy_field = function() {
+			$("#copy").val("[$]"+$("#latex").html()+"[/$]");
+		};
+	</script>
 </head><body>
 
 <p>Type math here: <span id="math-field"></span></p>
 <p>LaTeX of what you typed: <span id="latex"></span></p>
+<p>LaTeX with surrounding math tags:
+	<!-- thanks to http://stackoverflow.com/questions/4067469/selecting-all-text-in-html-text-input-when-clicked for the select-all-text-on-click trick -->
+	<input type="text" id="copy" onClick="this.setSelectionRange(0, this.value.length)">
 
 <script>
 var mathFieldSpan = document.getElementById('math-field');
@@ -18,6 +26,7 @@ var mathField = MQ.MathField(mathFieldSpan, {
   handlers: {
     edit: function() { // useful event handlers
       latexSpan.textContent = mathField.latex(); // simple API
+      update_copy_field();
     }
   }
 });

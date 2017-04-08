@@ -1,35 +1,41 @@
 <html><head>
+	<!-- it's important that the title is nice, because it's what shows up when
+		people bookmark this. -->
+	<title>LaTeX Tools</title>
 	<script src="jquery/jquery-3.2.0.min.js" type="text/javascript" charset="utf-8"></script>
-	
-	<link rel="stylesheet" href="mathquill-0.10.1/mathquill.css"/>
-	<script src="mathquill-0.10.1/mathquill.js"></script>
 	<script type="text/javascript">
-		update_copy_field = function() {
-			$("#copy").val("[$]"+$("#latex").html()+"[/$]");
-		};
+
+	startnum = 1;
+	i = startnum;
+
+	$(document).ready(function() {
+		document.body.innerHTML +=
+			"<br>" +
+			"<iframe src='mathquill_single.html' width='100%' class='frame'></iframe><br>" +
+			"<div id='div"+i+"'></div>";
+		i += 1;
+	});
+
+	addframe = function() {
+		document.getElementById("div"+(i-1)).innerHTML =
+			"<iframe src='mathquill_single.html' width='100%' class='frame'></iframe><br>" +
+			"<div id='div"+i+"'></div>";
+		i += 1;
+		$(".frame").height(""+(100/i)+"%");
+	}
+
+	load_detexify = function() {
+		$("#detexify").css('display', 'block');
+		$("#detexify").attr('src', "http://detexify.kirelabs.org/classify.html");
+	};
+
 	</script>
 </head><body>
+<input type="button" value="Add another MathQuill" onclick="addframe()"></input>
+<input type="button" value="Load Detexify" onclick="load_detexify()"><br>
 
-<p>Type math here: <span id="math-field"></span></p>
-<p>LaTeX of what you typed: <span id="latex"></span></p>
-<p>LaTeX with surrounding math tags:
-	<!-- thanks to http://stackoverflow.com/questions/4067469/selecting-all-text-in-html-text-input-when-clicked for the select-all-text-on-click trick -->
-	<input type="text" id="copy" onClick="this.setSelectionRange(0, this.value.length)">
-
-<script>
-var mathFieldSpan = document.getElementById('math-field');
-var latexSpan = document.getElementById('latex');
-
-var MQ = MathQuill.getInterface(2); // for backcompat
-var mathField = MQ.MathField(mathFieldSpan, {
-  spaceBehavesLikeTab: true, // configurable
-  handlers: {
-    edit: function() { // useful event handlers
-      latexSpan.textContent = mathField.latex(); // simple API
-      update_copy_field();
-    }
-  }
-});
-</script>
+<iframe id="detexify" class="detexify" width="100%" height="278px"
+	style="display:none">
 
 </body></html>
+
